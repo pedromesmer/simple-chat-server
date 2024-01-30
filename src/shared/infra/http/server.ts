@@ -18,14 +18,16 @@ const io = new socketio.Server(httpServer, {
 
 io.on('connection', socket => {
   const room = socket.handshake.query?.room;
+  const name = socket.handshake.query?.name;
+
   if (room) {
     socket.join(room);
   }
-  console.log('new connection: ', socket.id);
+  console.log('new connection: ', name);
 
   socket.on('message', message => {
     console.log('message: ', message);
-    if (room) io.to(room).emit('message', { user: socket.id, message });
+    if (room) io.to(room).emit('message', { user: name, message });
   });
 });
 
